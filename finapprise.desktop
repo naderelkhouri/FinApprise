@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FinApprise
+GenericName=Gestão Financeira & Contabilidade
+Comment=Sistema de Gerenciamento Financeiro e Módulos de Contabilidade
+Exec=/home/nader/Documents/Projects/FinApprise/finapprise
+Icon=/home/nader/Documents/Projects/FinApprise/assets/icon-256.png
+Terminal=false
+Categories=Office;Finance;Spreadsheet;Business;
+Keywords=financeiro;contabilidade;contabil;dre;fluxo;estoque;clientes;finapprise;
+StartupWMClass=finapprise
+StartupNotify=true
+X-GNOME-UsesNotifications=true

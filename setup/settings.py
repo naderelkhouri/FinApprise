@@ -8,15 +8,19 @@ import logging
 
 load_dotenv()
 
+import sys
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR / 'apps'))
+sys.path.insert(0, str(BASE_DIR))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-finapprise-local-desktop-key-2026')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -35,7 +39,7 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -96,19 +100,29 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'NewFinApprise',
-        'USER': 'SA',
-        'PASSWORD': config('DATABASE_PASSWORD'),
-        'HOST': 'localhost',  
-        'PORT': '',  
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',  
-        },
+DB_ENGINE = config('DB_ENGINE', default=os.getenv('DB_ENGINE', 'sqlite')).lower()
+
+if DB_ENGINE == 'mssql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mssql',
+            'NAME': config('DATABASE_NAME', default=os.getenv('DATABASE_NAME', 'NewFinApprise')),
+            'USER': config('DATABASE_USER', default=os.getenv('DATABASE_USER', 'SA')),
+            'PASSWORD': config('DATABASE_PASSWORD', default=os.getenv('DATABASE_PASSWORD', '')),
+            'HOST': config('DATABASE_HOST', default=os.getenv('DATABASE_HOST', 'localhost')),  
+            'PORT': config('DATABASE_PORT', default=os.getenv('DATABASE_PORT', '')),  
+            'OPTIONS': {
+                'driver': config('DATABASE_DRIVER', default=os.getenv('DATABASE_DRIVER', 'ODBC Driver 17 for SQL Server')),  
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
